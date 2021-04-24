@@ -1,27 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/src/widgets/async.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:motiv_flutter/beans/BaseBean.dart';
+import 'package:motiv_flutter/beans/Quote.dart';
 import 'package:motiv_flutter/model/BaseModel.dart';
+import 'package:motiv_flutter/presenter/BasePresenter.dart';
 
-class QuoteModel extends BaseModel {
-  @override
-  CollectionReference collectionReference() {
-    // TODO: implement collectionReference
-    throw UnimplementedError();
-  }
-
-  @override
-  Widget defaultBuilder(BuildContext context, snapshot) {
-    // TODO: implement defaultBuilder
-    throw UnimplementedError();
-  }
-
-  @override
-  StreamBuilder<QuerySnapshot> defaultStreamBuilder({Stream<dynamic> stream}) {
-    // TODO: implement defaultStreamBuilder
-    throw UnimplementedError();
-  }
+class QuoteModel extends BaseModel<Quote> {
+  QuoteModel(BasePresenter<BaseBean> presenter) : super(presenter);
 
   @override
   String path() => "Quotes";
+
+  @override
+  Quote mapToBean(Map<String, dynamic> map, String key) {
+    return Quote().fromMap(map, key);
+  }
 }

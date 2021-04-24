@@ -18,17 +18,16 @@ class Quote extends BaseBean {
       this.likes})
       : super(id);
 
-  Quote fromMap(Map<String, dynamic> map) {
+  Quote fromMap(Map<String, dynamic> map, String key) {
     return new Quote(
       quote: map['quote'] as String,
       author: map['author'] as String,
-      id: map['id'] as String,
+      id: key,
       style: map['style'] as String,
       userID: map['userID'] as String,
       date: map['date'] as DateTime,
       favorite: map['favorite'] as bool,
       reported: map['reported'] as bool,
-      likes: map['likes'] as List<String>,
     );
   }
 

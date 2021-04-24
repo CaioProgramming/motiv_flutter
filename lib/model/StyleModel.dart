@@ -1,24 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/src/widgets/async.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:motiv_flutter/beans/Style.dart';
 import 'package:motiv_flutter/model/BaseModel.dart';
+import 'package:motiv_flutter/presenter/BasePresenter.dart';
 
-class StyleModel extends BaseModel {
+class StyleModel extends BaseModel<Style> {
+  StyleModel(BasePresenter presenter) : super(presenter);
+
   @override
-  CollectionReference collectionReference() {
-    // TODO: implement collectionReference
-    throw UnimplementedError();
+  String path() {
+    return "Styles";
   }
 
   @override
-  Widget defaultBuilder(BuildContext context, snapshot) {
-    // TODO: implement defaultBuilder
-    throw UnimplementedError();
-  }
-
-  @override
-  StreamBuilder<QuerySnapshot> defaultStreamBuilder({Stream<dynamic> stream}) {
-    // TODO: implement defaultStreamBuilder
-    throw UnimplementedError();
+  Style mapToBean(Map<String, dynamic> map, String key) {
+    return Style().fromMap(map, key);
   }
 }
