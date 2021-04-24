@@ -1,9 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:motiv_flutter/beans/Quote.dart';
 import 'package:motiv_flutter/beans/Style.dart';
 import 'package:motiv_flutter/presenter/StylePresenter.dart';
+import 'package:motiv_flutter/utils/FontUtils.dart';
+import 'package:motiv_flutter/utils/constants.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class QuoteCard extends StatefulWidget {
@@ -16,7 +19,7 @@ class QuoteCard extends StatefulWidget {
 }
 
 class _QuoteCardState extends State<QuoteCard> {
-  Style style = Style.defaultStyle();
+  Style style = kDefaultStyle;
   @override
   void initState() {
     super.initState();
@@ -39,11 +42,14 @@ class _QuoteCardState extends State<QuoteCard> {
 
   @override
   Widget build(BuildContext context) {
+    Quote quote = widget.quote;
+    double width = MediaQuery.of(context).size.width;
+    int widthCard = 400;
+
+    double count = (width / widthCard) * 8;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: EdgeInsets.all(count),
       child: Container(
-        width: 500,
-        height: 500,
         decoration: BoxDecoration(
             color: Colors.purple.shade200,
             borderRadius: BorderRadius.circular(5),
@@ -122,15 +128,26 @@ class _QuoteCardState extends State<QuoteCard> {
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: AutoSizeText(
-                          widget.quote.quote,
-                          style: TextStyle(
-                              fontSize: 36,
-                              color:
-                                  TinyColor.fromString(style.textColor).color),
+                          quote.quote,
+                          style: GoogleFonts.getFont(
+                                  FontUtils().loadFont(style.font))
+                              .copyWith(
+                                  fontSize: 36,
+                                  shadows: [
+                                    Shadow(
+                                        blurRadius: style.shadowStyle.radius,
+                                        color: TinyColor.fromString(
+                                                style.shadowStyle.shadowColor)
+                                            .color,
+                                        offset: Offset(style.shadowStyle.dx,
+                                            style.shadowStyle.dy))
+                                  ],
+                                  color: TinyColor.fromString(style.textColor)
+                                      .color),
                           textAlign: TextAlign.center,
                           minFontSize: 12,
                           maxFontSize: 36,
-                          maxLines: 5,
+                          maxLines: 10,
                           overflow: TextOverflow.fade,
                         ),
                       ),
@@ -139,11 +156,12 @@ class _QuoteCardState extends State<QuoteCard> {
                         child: AutoSizeText(
                           widget.quote.author,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                              color:
-                                  TinyColor.fromString(style.textColor).color),
+                          style: GoogleFonts.getFont(
+                                  FontUtils().loadFont(style.font))
+                              .copyWith(
+                                  fontSize: 36,
+                                  color: TinyColor.fromString(style.textColor)
+                                      .color),
                           minFontSize: 12,
                           maxFontSize: 16,
                           maxLines: 2,

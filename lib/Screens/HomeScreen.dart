@@ -33,9 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ChangeNotifierProvider(
         create: (context) => HomeProvider(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,7 +7,7 @@ abstract class BaseModel<T extends BaseBean> {
 
   BaseModel(this.presenter);
 
-  final firestoreInstance = Firestore.instance;
+  final firestoreInstance = FirebaseFirestore.instance;
 
   String path();
 
@@ -31,17 +31,17 @@ abstract class BaseModel<T extends BaseBean> {
 
   void getSingleDocument(String key) async {
     DocumentSnapshot documentSnapshot =
-        await collectionReference().document(key).get();
+        await collectionReference().doc(key).get();
 
     presenter.showSingleData(
-        mapToBean(documentSnapshot.data, documentSnapshot.documentID));
+        mapToBean(documentSnapshot.data(), documentSnapshot.id));
   }
 
   void getSingleDocumentObject(String key, Function(T) onObjectComplete) {
     print('querying $key on ${path()}');
-    collectionReference().document(key).get().then((snapshot) {
+    collectionReference().doc(key).get().then((snapshot) {
       print('returning ${snapshot.data} from ${path()}');
-      return onObjectComplete(mapToBean(snapshot.data, snapshot.documentID));
+      return onObjectComplete(mapToBean(snapshot.data(), snapshot.id));
     });
   }
 
@@ -49,8 +49,8 @@ abstract class BaseModel<T extends BaseBean> {
       await firestoreInstance.collection(path()).add(map);
 
   void editData(String key, Map<String, dynamic> map) async =>
-      await firestoreInstance.collection(path()).document(key).updateData(map);
+      await firestoreInstance.collection(path()).doc(key).set(map);
 
   void deleteData(String key) async =>
-      await firestoreInstance.collection(path()).document(key).delete();
+      await firestoreInstance.collection(path()).doc(key).delete();
 }

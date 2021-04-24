@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:motiv_flutter/beans/Quote.dart';
 import 'package:motiv_flutter/components/QuoteCard.dart';
 import 'package:motiv_flutter/provider/HomeProvider.dart';
-import 'package:motiv_flutter/provider/StyleProvider.dart';
 import 'package:provider/provider.dart';
 
 class QuoteStream extends StatefulWidget {
@@ -34,33 +33,29 @@ class _QuoteStreamState extends State<QuoteStream> {
     if (getProvider().dataList == null) {
       return CupertinoActivityIndicator();
     } else {
-      return ChangeNotifierProvider(
-        create: (BuildContext context) => StyleProvider(),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: provider.dataList,
-          builder: (context, snapshot) {
-            final quotes = snapshot.data.documents;
-            if (snapshot.data.documents == null) {
-              return CupertinoActivityIndicator();
-            }
-            return GridView.builder(
-                itemCount: quotes.length,
-                shrinkWrap: true,
-                padding: EdgeInsets.all(0),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisSpacing: 4,
-                    mainAxisSpacing: 4,
-                    crossAxisCount: countRow,
-                    childAspectRatio: 2 / 1.8),
-                itemBuilder: (context, index) {
-                  Map<String, dynamic> documentMap = quotes[index].data;
-                  print("mapped snapshot ->  $documentMap");
-                  Quote quote =
-                      Quote().fromMap(documentMap, quotes[index].documentID);
-                  return QuoteCard(quote);
-                });
-          },
-        ),
+      return StreamBuilder<QuerySnapshot>(
+        stream: provider.dataList,
+        builder: (context, snapshot) {
+          final quotes = snapshot.data.docs;
+          if (snapshot.data.docs == null) {
+            return CupertinoActivityIndicator();
+          }
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: quotes.length,
+                  itemBuilder: (context, index) {
+                    Map<String, dynamic> documentMap = quotes[index].data();
+                    print("mapped snapshot ->  $documentMap");
+                    Quote quote =
+                        Quote().fromMap(documentMap, quotes[index].id);
+                    return QuoteCard(quote);
+                  }),
+            ),
+          );
+        },
       );
     }
   }
